@@ -1344,7 +1344,7 @@ export function evaluateDualQuaternionFormationFeasibility(matrixText: string, n
       'condition1',
       '条件 (i)：零特征值简单且最小',
       condition1Ok,
-      '这条条件检查拉普拉斯矩阵是否恰好只有一个零特征值，并且它位于谱的最小端。若不成立，连通图版 Corollary 6.3 无法判为可行。'
+      '这条条件检查拉普拉斯矩阵是否恰好只有一个零特征值，并且它位于谱的最小端。若不成立，当前构型不能判为可行。'
     ));
     conditions.push(makeConditionItem(
       'condition2',
@@ -1364,7 +1364,7 @@ export function evaluateDualQuaternionFormationFeasibility(matrixText: string, n
       'feasible',
       '可行性判定',
       feasible ? '可行' : '不可行',
-      '这里给出论文连通图版 Corollary 6.3 的最终结论。只有三条条件同时成立时，目标相对构型才判为可行。'
+      '这里给出最终判定结论。只有三条条件同时成立时，目标相对构型才判为可行。'
     ));
     indicators.push(makeIndicatorItem(
       'zeroEigenCount',
@@ -1395,13 +1395,13 @@ export function evaluateDualQuaternionFormationFeasibility(matrixText: string, n
     const zeroEigenvectorTitle: string = '零特征向量';
     const zeroEigenvectorText: string = zeroPairIndex < 0 ? '未找到零特征值对应的特征向量。' :
       formatDualQuaternionVectorLines(pairs[zeroPairIndex].primalQuaternion, pairs[zeroPairIndex].dualQuaternion).join('\n');
-    const summary: string = feasible ? '满足论文 Corollary 6.3 的三项条件，该目标相对构型可行。' :
-      '未满足论文 Corollary 6.3 的全部条件，该目标相对构型当前不能判为可行。';
+    const summary: string = feasible ? '满足全部三项条件，该目标相对构型可行。' :
+      '未满足全部三项条件，该目标相对构型当前不能判为可行。';
 
     return new FormationFeasibilityResult(
       true,
       feasible,
-      feasible ? 'ok' : '判定完成，但未通过全部论文条件',
+      feasible ? 'ok' : '判定完成，但未通过全部条件',
       summary,
       conditions,
       indicators,
