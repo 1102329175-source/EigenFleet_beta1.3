@@ -9,6 +9,29 @@ export class MatrixGridData {
   ed: string[][] = [];
 }
 
+export class MatrixComponentLegendItem {
+  component: number;
+  shortLabel: string;
+  label: string;
+  backgroundColor: string;
+  borderColor: string;
+
+  constructor(component: number, shortLabel: string, label: string, backgroundColor: string, borderColor: string) {
+    this.component = component;
+    this.shortLabel = shortLabel;
+    this.label = label;
+    this.backgroundColor = backgroundColor;
+    this.borderColor = borderColor;
+  }
+}
+
+const MATRIX_COMPONENT_LEGENDS: MatrixComponentLegendItem[] = [
+  new MatrixComponentLegendItem(0, 'a', '实部 a', '#EAF3FF', '#9CC7FF'),
+  new MatrixComponentLegendItem(1, 'b', 'i 分量 b', '#FFF1E5', '#F4B57D'),
+  new MatrixComponentLegendItem(2, 'c', 'j 分量 c', '#E9F7EA', '#8DCEA0'),
+  new MatrixComponentLegendItem(3, 'd', 'k 分量 d', '#FCEAF4', '#E3A0C1')
+];
+
 function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -43,6 +66,17 @@ export function createFilledGrid(n: number, fill: string): string[][] {
     grid.push(row);
   }
   return grid;
+}
+
+export function getMatrixComponentLegends(): MatrixComponentLegendItem[] {
+  return MATRIX_COMPONENT_LEGENDS;
+}
+
+export function getMatrixComponentLegend(component: number): MatrixComponentLegendItem {
+  if (component >= 0 && component < MATRIX_COMPONENT_LEGENDS.length) {
+    return MATRIX_COMPONENT_LEGENDS[component];
+  }
+  return MATRIX_COMPONENT_LEGENDS[0];
 }
 
 function cloneGrid(source: string[][]): string[][] {

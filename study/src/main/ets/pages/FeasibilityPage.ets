@@ -18,6 +18,8 @@ import {
   createResetQuaternionGrid,
   createUnbalancedJudgeExample,
   formatTimeText,
+  getMatrixComponentLegend,
+  MatrixComponentLegendItem,
   MatrixGridData,
   matrixTextFromGrid,
   updateGridCell
@@ -109,6 +111,16 @@ struct FeasibilityPage {
       arr.push(i);
     }
     return arr;
+  }
+
+  private componentBackground(component: number, enabled: boolean = true): string {
+    const legend: MatrixComponentLegendItem = getMatrixComponentLegend(component);
+    return enabled ? legend.backgroundColor : '#F5F7FA';
+  }
+
+  private componentBorder(component: number, enabled: boolean = true): string {
+    const legend: MatrixComponentLegendItem = getMatrixComponentLegend(component);
+    return enabled ? legend.borderColor : '#D0D7E6';
   }
 
   private updateN(value: string) {
@@ -404,6 +416,42 @@ struct FeasibilityPage {
   }
 
   @Builder
+  private buildLegendChip(item: MatrixComponentLegendItem) {
+    Row({ space: 8 }) {
+      Blank()
+        .width(14)
+        .height(14)
+        .backgroundColor(item.backgroundColor)
+        .borderRadius(7)
+        .border({ width: 1, color: item.borderColor })
+      Text(item.label)
+        .fontSize(12)
+        .fontColor('#5B657A')
+    }
+    .padding({ top: 6, right: 10, bottom: 6, left: 10 })
+    .backgroundColor('#FFFFFF')
+    .border({ width: 1, color: '#D8E1F2', radius: 14 })
+  }
+
+  @Builder
+  private buildMatrixLegend() {
+    Column({ space: 8 }) {
+      Row({ space: 8 }) {
+        this.buildLegendChip(getMatrixComponentLegend(0))
+        this.buildLegendChip(getMatrixComponentLegend(1))
+      }
+      .width('100%')
+
+      Row({ space: 8 }) {
+        this.buildLegendChip(getMatrixComponentLegend(2))
+        this.buildLegendChip(getMatrixComponentLegend(3))
+      }
+      .width('100%')
+    }
+    .width('100%')
+  }
+
+  @Builder
   private buildMatrixSection(title: string, description: string, isDual: boolean, allowDiagonalEdit: boolean) {
     Column({ space: 8 }) {
       Text(title)
@@ -413,6 +461,7 @@ struct FeasibilityPage {
       Text(description)
         .fontSize(13)
         .fontColor('#667085')
+      this.buildMatrixLegend()
 
       Scroll() {
         Scroll() {
@@ -423,17 +472,26 @@ struct FeasibilityPage {
                   Column() {
                     if (i === j) {
                       if (isDual && !allowDiagonalEdit) {
-                        Text('0')
-                          .width(56)
-                          .height(40)
-                          .textAlign(TextAlign.Center)
-                          .fontSize(16)
-                          .fontColor('#98A2B3')
-                          .padding({ top: 8 })
+                        Column() {
+                          Text('0')
+                            .width('100%')
+                            .textAlign(TextAlign.Center)
+                            .fontSize(16)
+                            .fontColor('#98A2B3')
+                        }
+                        .width(56)
+                        .height(40)
+                        .justifyContent(FlexAlign.Center)
+                        .backgroundColor(this.componentBackground(0, false))
+                        .opacity(0.72)
+                        .border({ width: 1, color: this.componentBorder(0, false), radius: 8 })
                       } else {
                         TextInput({ text: isDual ? this.ea[i][j] : this.qa[i][j] })
                           .width(56)
                           .height(40)
+                          .fontColor('#183153')
+                          .backgroundColor(this.componentBackground(0))
+                          .border({ width: 1, color: this.componentBorder(0), radius: 8 })
                           .onChange((v: string) => {
                             if (isDual) {
                               this.updateDualCell(i, j, 0, v, allowDiagonalEdit);
@@ -449,6 +507,10 @@ struct FeasibilityPage {
                             .width(48)
                             .height(32)
                             .enabled(i < j)
+                            .fontColor('#183153')
+                            .backgroundColor(this.componentBackground(0, i < j))
+                            .border({ width: 1, color: this.componentBorder(0, i < j), radius: 8 })
+                            .opacity(i < j ? 1 : 0.72)
                             .onChange((v: string) => {
                               if (isDual) {
                                 this.updateDualCell(i, j, 0, v, allowDiagonalEdit);
@@ -460,6 +522,10 @@ struct FeasibilityPage {
                             .width(48)
                             .height(32)
                             .enabled(i < j)
+                            .fontColor('#183153')
+                            .backgroundColor(this.componentBackground(1, i < j))
+                            .border({ width: 1, color: this.componentBorder(1, i < j), radius: 8 })
+                            .opacity(i < j ? 1 : 0.72)
                             .onChange((v: string) => {
                               if (isDual) {
                                 this.updateDualCell(i, j, 1, v, allowDiagonalEdit);
@@ -473,6 +539,10 @@ struct FeasibilityPage {
                             .width(48)
                             .height(32)
                             .enabled(i < j)
+                            .fontColor('#183153')
+                            .backgroundColor(this.componentBackground(2, i < j))
+                            .border({ width: 1, color: this.componentBorder(2, i < j), radius: 8 })
+                            .opacity(i < j ? 1 : 0.72)
                             .onChange((v: string) => {
                               if (isDual) {
                                 this.updateDualCell(i, j, 2, v, allowDiagonalEdit);
@@ -484,6 +554,10 @@ struct FeasibilityPage {
                             .width(48)
                             .height(32)
                             .enabled(i < j)
+                            .fontColor('#183153')
+                            .backgroundColor(this.componentBackground(3, i < j))
+                            .border({ width: 1, color: this.componentBorder(3, i < j), radius: 8 })
+                            .opacity(i < j ? 1 : 0.72)
                             .onChange((v: string) => {
                               if (isDual) {
                                 this.updateDualCell(i, j, 3, v, allowDiagonalEdit);

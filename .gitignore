@@ -10,3 +10,23 @@
 /.clang-tidy
 **/.test
 /.appanalyzer
+build-profile.json5
+
+# DevEco / HarmonyOS local signing material
+*.p12
+*.p7b
+*.cer
+*.jks
+*.keystore
+*.pem
+*.key
+*.csr
+*.der
+
+# Build artifacts / install packages
+*.hap
+*.app
+*.har
+
+# Optional local editor workspace
+.vscode/
